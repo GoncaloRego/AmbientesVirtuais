@@ -3,11 +3,18 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Rigidbody playerRigidBody;
+    private Transform playerTransform;
+    Animator animation;
     public float jumpSpeed;
+    public float speed;
 	// Use this for initialization
 	void Start ()
     {
-	
+        animation = GetComponent<Animator>();
+
+        playerRigidBody = GetComponent<Rigidbody>();
+        playerTransform = transform;
 	}
 	
     void MovePlayer()
@@ -20,11 +27,12 @@ public class PlayerMovement : MonoBehaviour
         jump = Input.GetAxis("Jump");
 
         movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
+        playerTransform.position += movement * Time.deltaTime * speed;
     }
 
 	// Update is called once per frame
 	void Update ()
     {
-	
+        MovePlayer();
 	}
 }
