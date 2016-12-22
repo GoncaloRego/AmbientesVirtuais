@@ -30,6 +30,26 @@ public class PlayerMovement : MonoBehaviour
         playerTransform.position += movement * Time.deltaTime * speed;
 
         animation.Play("Basic_Walk_01_Root");
+
+        if(Input.GetKeyDown("LeftShift"))
+        {
+            Run();
+        }
+    }
+
+    void Run()
+    {
+        float moveHorizontal, moveVertical, jump;
+        Vector3 movement;
+
+        moveHorizontal = Input.GetAxis("Horizontal");
+        moveVertical = Input.GetAxis("Vertical");
+        jump = Input.GetAxis("Jump");
+
+        movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
+        playerTransform.position += movement * Time.deltaTime * speed * 3;
+
+        animation.Play("Basic_Run_03");
     }
 
 	// Update is called once per frame
