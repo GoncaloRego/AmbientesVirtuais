@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
 
         movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
         playerTransform.position += movement * Time.deltaTime * speed;
+
+        animation.Play("Basic_Walk_01_Root");
     }
 
 	// Update is called once per frame
