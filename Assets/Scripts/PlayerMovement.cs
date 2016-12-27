@@ -8,19 +8,25 @@ public class PlayerMovement : MonoBehaviour
     Animator animation;
     public float jumpSpeed;
     public float speed;
-	// Use this for initialization
+    public float gravity;
+    bool isMoving;
+    bool isRunning;
+
 	void Start ()
     {
         animation = GetComponent<Animator>();
 
         playerRigidBody = GetComponent<Rigidbody>();
         playerTransform = transform;
+
+        isMoving = false;
+        isRunning = false;
 	}
 	
     void MovePlayer()
     {
         float moveHorizontal, moveVertical, jump;
-        Vector3 movement;
+        Vector3 movement = Vector3.zero;
 
         moveHorizontal = Input.GetAxis("Horizontal");
         moveVertical = Input.GetAxis("Vertical");
@@ -29,17 +35,32 @@ public class PlayerMovement : MonoBehaviour
         movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
         playerTransform.position += movement * Time.deltaTime * speed;
 
-        animation.Play("Basic_Walk_01_Root");
+        RaycastHit floorHit;
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(camRay, out floorHit, 100.0f, LayerMask.GetMask("Box001")))
+        {
+            Vector3 playerToMouse = floorHit.point - playerTransform.position;
+            playerToMouse.y = 0f;
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+            playerRigidBody.MoveRotation(newRotation);
+        }
 
-        if(Input.GetKeyDown("LeftShift"))
+        if(Input.GetKey(KeyCode.LeftShift))
         {
             Run();
+        }
+
+        if(movement != Vector3.zero)
+        {
+            isMoving = true;
         }
     }
 
     void Run()
     {
-        float moveHorizontal, moveVertical, jump;
+        isMoving = false;
+
+        float moveHorizontal, moveVertical, jump, runSpeed = 3f;
         Vector3 movement;
 
         moveHorizontal = Input.GetAxis("Horizontal");
@@ -47,14 +68,32 @@ public class PlayerMovement : MonoBehaviour
         jump = Input.GetAxis("Jump");
 
         movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
-        playerTransform.position += movement * Time.deltaTime * speed * 3;
+        playerTransform.position += movement * runSpeed * Time.deltaTime;
 
-        animation.Play("Basic_Run_03");
+        isRunning = true;
     }
 
-	// Update is called once per frame
+    void animationControl()
+    {
+        if(isMoving == false && isRunning == false)
+        {
+            animation.Play("Idle");
+        }
+
+        else if(isMoving == true)
+        {
+            animation.Play("Walk");
+        }
+
+        else if(isRunning == true)
+        {
+            animation.Play("Run");
+        }
+    }
+
 	void Update ()
     {
         MovePlayer();
+        animationControl();
 	}
 }
