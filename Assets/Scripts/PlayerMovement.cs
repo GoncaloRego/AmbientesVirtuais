@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
             animation.Play("Run");
         }
     }
-
+     //hjsgdfkas
 	void Update ()
     {
         MovePlayer();
