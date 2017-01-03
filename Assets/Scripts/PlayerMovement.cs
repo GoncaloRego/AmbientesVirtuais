@@ -50,9 +50,13 @@ public class PlayerMovement : MonoBehaviour
             Run();
         }
 
-        if(movement != Vector3.zero)
+        if (movement != Vector3.zero)
         {
             isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
         }
     }
 
@@ -75,20 +79,48 @@ public class PlayerMovement : MonoBehaviour
 
     void animationControl()
     {
-        if(isMoving == false && isRunning == false)
+
+        if (isMoving == true)
         {
-            animation.Play("Idle");
+            animation.SetBool("andar", true);
+        }
+
+        else
+        {
+            animation.SetBool("andar", false);
+        }
+
+        if(isRunning == true)
+        {
+            animation.SetBool("correr", true);
+        }
+
+        else
+        {
+            animation.SetBool("correr", false);
+        }
+        /*
+        animation.ResetTrigger("Idle");
+        animation.ResetTrigger("Walk");
+        animation.ResetTrigger("Run");
+        if (isMoving == false && isRunning == false)
+        {
+            animation.SetTrigger("Idle");
+            //animation.Play("Idle");
         }
 
         else if(isMoving == true)
         {
-            animation.Play("Walk");
+            animation.SetTrigger("Walk");
+            //animation.Play("Walk");
         }
 
         else if(isRunning == true)
         {
-            animation.Play("Run");
+            animation.SetTrigger("Run");
+            //animation.Play("Run");
         }
+        */
     }
      //hjsgdfkas
 	void Update ()
