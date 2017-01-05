@@ -11,7 +11,8 @@ public class PlayerMovement : MonoBehaviour
     public float gravity;
     bool isMoving;
     bool isRunning;
-    bool isAttacking;
+    bool isAttacking = false;
+    
 
 	void Start ()
     {
@@ -22,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
         isMoving = false;
         isRunning = false;
-        isAttacking = false;
+    
 	}
 	
     void MovePlayer()
@@ -33,19 +34,13 @@ public class PlayerMovement : MonoBehaviour
         moveHorizontal = Input.GetAxis("Horizontal");
         moveVertical = Input.GetAxis("Vertical");
         jump = Input.GetAxis("Jump");
+        speed = 0.3f;
 
         movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
         playerTransform.position += movement * Time.deltaTime * speed;
 
-        RaycastHit floorHit;
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(camRay, out floorHit, 100.0f, LayerMask.GetMask("Box001")))
-        {
-            Vector3 playerToMouse = floorHit.point - playerTransform.position;
-            playerToMouse.y = 0f;
-            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-            playerRigidBody.MoveRotation(newRotation);
-        }
+      
+    
 
         if(Input.GetKey(KeyCode.LeftShift))
         {
@@ -80,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isMoving = false;
 
-        float moveHorizontal, moveVertical, jump, runSpeed = 3f;
+        float moveHorizontal, moveVertical, jump, runSpeed = 1f;
         Vector3 movement;
 
         moveHorizontal = Input.GetAxis("Horizontal");
@@ -117,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
         if(isRunning == true)
         {
             animation.SetBool("correr", true);
+            isRunning = false;
         }
 
         else
@@ -127,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
         if(isAttacking == true)
         {
             animation.SetBool("atacar", true);
+            isAttacking = false;
         }
 
         else
