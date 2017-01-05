@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float gravity;
     bool isMoving;
     bool isRunning;
+    bool isAttacking;
 
 	void Start ()
     {
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
         isMoving = false;
         isRunning = false;
+        isAttacking = false;
 	}
 	
     void MovePlayer()
@@ -48,16 +50,30 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftShift))
         {
             Run();
+            //isRunning = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            isMoving = false;
+            isRunning = false;
+            isAttacking = true;
+            Attack();
         }
 
         if (movement != Vector3.zero)
         {
             isMoving = true;
         }
+
         else
         {
             isMoving = false;
         }
+
+        /*isMoving = false;
+        isRunning = false;
+        isAttacking = false;*/
     }
 
     void Run()
@@ -74,7 +90,15 @@ public class PlayerMovement : MonoBehaviour
         movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
         playerTransform.position += movement * runSpeed * Time.deltaTime;
 
-        isRunning = true;
+        if(movement != Vector3.zero)
+        {
+            isRunning = true;
+        }
+
+        else
+        {
+            isRunning = false;
+        }
     }
 
     void animationControl()
@@ -99,6 +123,16 @@ public class PlayerMovement : MonoBehaviour
         {
             animation.SetBool("correr", false);
         }
+
+        if(isAttacking == true)
+        {
+            animation.SetBool("atacar", true);
+        }
+
+        else
+        {
+            animation.SetBool("atacar", false);
+        }
         /*
         animation.ResetTrigger("Idle");
         animation.ResetTrigger("Walk");
@@ -122,7 +156,12 @@ public class PlayerMovement : MonoBehaviour
         }
         */
     }
-     //hjsgdfkas
+
+    void Attack()
+    {
+        
+    }
+
 	void Update ()
     {
         MovePlayer();
