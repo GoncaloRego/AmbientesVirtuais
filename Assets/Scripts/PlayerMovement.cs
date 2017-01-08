@@ -9,12 +9,14 @@ public class PlayerMovement : MonoBehaviour
     public float jumpSpeed;
     public float speed;
     public float gravity;
+    public float rotationSpeed;
     bool isMoving;
     bool isRunning;
-    bool isAttacking = false;
-    
+    bool isAttacking;
+    Vector3 rotate;
 
-	void Start ()
+
+    void Start ()
     {
         animation = GetComponent<Animator>();
 
@@ -23,7 +25,9 @@ public class PlayerMovement : MonoBehaviour
 
         isMoving = false;
         isRunning = false;
-    
+        isAttacking = false;
+
+        rotate = Vector3.zero;
 	}
 	
     void MovePlayer()
@@ -31,21 +35,47 @@ public class PlayerMovement : MonoBehaviour
         float moveHorizontal, moveVertical, jump;
         Vector3 movement = Vector3.zero;
 
-        moveHorizontal = Input.GetAxis("Horizontal");
+        if(Input.GetKey(KeyCode.W))
+        {
+            playerTransform.Translate(Vector3.forward * speed * Time.deltaTime);
+            isMoving = true;
+        }
+
+        if(Input.GetKey(KeyCode.S))
+        {
+            playerTransform.Translate(Vector3.back * speed * Time.deltaTime);
+            isMoving = true;
+        }
+
+        if(Input.GetKey(KeyCode.A))
+        {
+            playerTransform.Rotate(Vector3.up * -rotationSpeed * Time.deltaTime);
+        }
+
+        if(Input.GetKey(KeyCode.D))
+        {
+            playerTransform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+        }
+
+        /*moveHorizontal = Input.GetAxis("Horizontal");
         moveVertical = Input.GetAxis("Vertical");
         jump = Input.GetAxis("Jump");
         speed = 0.3f;
 
-        movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
-        playerTransform.position += movement * Time.deltaTime * speed;
+        //Player Rotation
+        rotate = new Vector3(0.0f, moveHorizontal, 0.0f);
+        playerTransform.Rotate(rotate * rotationSpeed * Time.deltaTime);
 
-      
-    
+        rotate = new Vector3(0.0f, 0.0f, moveVertical);
+        playerTransform.Translate(rotate * speed * Time.deltaTime);
+
+
+        movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
+        playerTransform.position += movement * Time.deltaTime * speed;*/
 
         if(Input.GetKey(KeyCode.LeftShift))
         {
             Run();
-            //isRunning = true;
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -55,27 +85,35 @@ public class PlayerMovement : MonoBehaviour
             isAttacking = true;
             Attack();
         }
-
-        if (movement != Vector3.zero)
-        {
-            isMoving = true;
-        }
-
-        else
-        {
-            isMoving = false;
-        }
-
-        /*isMoving = false;
-        isRunning = false;
-        isAttacking = false;*/
     }
 
     void Run()
     {
         isMoving = false;
 
-        float moveHorizontal, moveVertical, jump, runSpeed = 1f;
+        if (Input.GetKey(KeyCode.W))
+        {
+            playerTransform.Translate(Vector3.forward * speed * Time.deltaTime);
+            isRunning = true;
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            playerTransform.Translate(Vector3.back * speed * Time.deltaTime);
+            isRunning = true;
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            playerTransform.Rotate(Vector3.up * -rotationSpeed * Time.deltaTime);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            playerTransform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+        }
+
+        /*float moveHorizontal, moveVertical, jump, runSpeed = 1f;
         Vector3 movement;
 
         moveHorizontal = Input.GetAxis("Horizontal");
@@ -93,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isRunning = false;
-        }
+        }*/
     }
 
     void animationControl()
