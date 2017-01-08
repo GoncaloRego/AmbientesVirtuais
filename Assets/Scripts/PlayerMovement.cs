@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public float gravity;
     public float rotationSpeed;
+    public float runSpeed;
     bool isMoving;
     bool isRunning;
     bool isAttacking;
@@ -93,13 +94,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            playerTransform.Translate(Vector3.forward * speed * Time.deltaTime);
+            playerTransform.Translate(Vector3.forward * runSpeed * Time.deltaTime);
             isRunning = true;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            playerTransform.Translate(Vector3.back * speed * Time.deltaTime);
+            playerTransform.Translate(Vector3.back * runSpeed * Time.deltaTime);
             isRunning = true;
         }
 
